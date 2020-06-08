@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
+
+import sun.security.util.Length;
+
 import java.time.*;
 
 public class Bp{
@@ -29,7 +32,7 @@ public class Bp{
         for(int i = 0; i < len -1;i++){
             Layer l = new Layer();
             l.addcount();
-            l.randomWeight(len);
+            l.randomWeight(nelen);
             mLayer.add(l);
         }
         for(int j =0; j < mLayer.size();j++){
@@ -63,7 +66,7 @@ public class Bp{
         double sum =0;
         for( int i =0; i < mLayer.get(length-1).length ;i ++)
             sum += mLayer.get(length-1).realout[i] - mLayer.get(length-1).lout[i];
-        sum = sum /(length -1);
+        sum = sum /(length);
         return sum;
     }
     void printConstruction(){
@@ -95,45 +98,46 @@ public class Bp{
     public static void main(String[] args) {
         LocalTime time1 = LocalTime.now();
         Bp backfeed = new Bp();
-        double[] in = {1,0,0};
-        double[] out = {1,0,0};
-        backfeed.init(3,in,3,out);
-        for (int i =0;i <20000;i++){
-            double[] in1 = {1,0,0};
-            double[] out1 = {1,0,0};
+        double[] in = {1,0,0,0,0,0,0,0,0,0};
+        double[] out = {1,0,0,0,0,0,0,0,0,0};
+        backfeed.init(3,in,10,out);
+        for (int i =0;i <1000;i++){
+            double[] in1 = {1,0,0,0,0,0,0,0,0,0};
+            double[] out1 = {1,0,0,0,0,0,0,0,0,0};
             //Random r = new Random();
             int y =0;
             y = i%3;
             if (y ==0){
-                in1 = new double[] {1,0,0};
-                out1 = new double[] {1,0,0};
+                in1 = new double[] {1,0,0,0,0,0,0,0,0,0};
+                out1 = new double[] {1,0,0,0,0,0,0,0,0,0};
             }
             
             if (y ==1){
-                in1 = new double[] {0,1,0};
-                out1 = new double[] {0,1,0};
+                in1 = new double[] {0,1,0,0,0,0,0,0,0,0};
+                out1 = new double[] {0,1,0,0,0,0,0,0,0,0};
             }
             if (y ==2){
-                in1 = new double[] {0,0,1};
-                out1 = new double[] {0,0,1};
+                in1 = new double[] {0,0,1,0,0,0,0,0,0,0};
+                out1 = new double[] {0,0,1,0,0,0,0,0,0,0};
             }
             backfeed.setin(in1);
             backfeed.settarget(out1);
             backfeed.feedward();
             backfeed.backward();
-            if ( backfeed.get_error() < 0.001 )
-                break;
+            // if ( backfeed.get_error() < 0.01 / backfeed.length )
+            //     break;
         }
         LocalTime time2 = LocalTime.now();
 
-        double[] in1 = {1,0,0};
+        double[] in1 = {1,0,0,0};
+        System.out.println("共："+backfeed.length+"层Layer");
         System.out.println("当： {1,0,0}时");
-        in1 = new double[] {1,0,0};
+        in1 = new double[] {1,0,0,0};
         backfeed.setin(in1);
         backfeed.feedward();
         backfeed.printConstruction();
         System.out.println("当： {0,1,0}时");
-        in1 = new double[] {0,1,0};
+        in1 = new double[] {0,1,0,0};
         backfeed.setin(in1);
         backfeed.feedward();
         backfeed.printConstruction();
