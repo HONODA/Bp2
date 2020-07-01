@@ -31,6 +31,7 @@ public class Layer{
         lout = out;
     }
     void randomWeight(int len,int weightlen){
+        //len 该层细胞数//weightlen 前一层
         Random r = new Random();
         length = len;
         if(neurals ==null)
@@ -50,7 +51,6 @@ public class Layer{
         }
     }
 
-
     void feedward(){
         if(realout == null)
             realout = new double[length]; 
@@ -63,7 +63,7 @@ public class Layer{
         else{
             for (int i =0;i < length ;i++){ //这一层细胞数
                 double sum = 0;
-                for(int j =0;j < neurals[i].length;j++)//细胞数的weight总数
+                for(int j =0;j < neurals[i].Weight.length;j++)//细胞数的weight总数
                     sum += neurals[i].Weight[j] * pre.realout[j]; //前者所有细胞的输出分别与该层这个细胞的权值相乘。
                 
                 net[i] = sum + basis; 
@@ -158,7 +158,7 @@ public class Layer{
     double RELU(double mnet,boolean derivative){
         Random r = new Random();
         double alpha = r.nextGaussian();
-
+        //double alpha = 0.5;
         if (mnet <= 0){
             if (!derivative){//不求导
                double y =  alpha * mnet;

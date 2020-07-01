@@ -26,7 +26,12 @@ public class Bp{
         Layer inlayer = new Layer();
         inlayer.addcount();
         mLayer.add(inlayer);
-        for(int i = 0; i < len -2;i++){
+        Layer intol = new Layer();
+        intol.addcount();
+        intol.randomWeight(nelen,in.length);
+        mLayer.add(intol);
+
+        for(int i = 0; i < len -3;i++){
             Layer l = new Layer();
             l.addcount();
             l.randomWeight(nelen,nelen);
@@ -108,27 +113,26 @@ public class Bp{
     public static void main(String[] args) {
         LocalTime time1 = LocalTime.now();
         Bp backfeed = new Bp();
-        double[] in = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-        double[] out = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-        backfeed.init(3,in,24,out);
-        for (int i =0;i <2000;i++){
-            double[] in1 = {1,0,0};
+        double[] in = {0,0,0,0,0,0,0,0,0,0};
+        double[] out = {0,0,0};
+        backfeed.init(3,in,5,out);
+        for (int i =0;i <5000;i++){
+            double[] in1 = {};
             double[] out1 ={}; 
             //Random r = new Random();
             int y =0;
             y = i%3;
             if (y ==0){
-                in1 = new double[] {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-                out1 = new double[] {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+                in1 = new double[] {1,0,0,0,0,0,0,0,0,0};
+                out1 = new double[] {1,0,0};
             }
-            
             if (y ==1){
-                in1 = new double[] {0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-                out1 = new double[] {0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+                in1 = new double[] {0,0,0,0,1,0,0,0,0,0};
+                out1 = new double[] {0,1,0};
             }
             if (y ==2){
-                in1 = new double[] {0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-                out1 = new double[] {0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+                in1 = new double[] {0,0,0,1,1,0,0,0,0,0};
+                out1 = new double[] {1,1,0};
             }
             backfeed.setin(in1);
             backfeed.settarget(out1);
@@ -142,17 +146,19 @@ public class Bp{
 
         double[] in1 = {};
         System.out.println("共："+backfeed.length+"层Layer");
-        System.out.println("当： {0,0,0,0,1}时");
-        in1 = new double[] {0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-        backfeed.setin(in1);
-        backfeed.feedward();
-        backfeed.printConstruction();
         System.out.println("当： {1,0,0,0,0}时");
-        in1 = new double[]{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        in1 = new double[] {1,0,0,0,0};
         backfeed.setin(in1);
         backfeed.feedward();
         backfeed.printConstruction();
+        System.out.println("当： {0,0,0,1,1}时");
+        in1 = new double[]{0,0,0,1,1};
+        backfeed.setin(in1);
+        backfeed.feedward();
+        backfeed.printConstruction();
+
         System.out.println("开始时间："+time1.toString());
         System.out.println("结束时间："+time2.toString());
+
     }
 }
