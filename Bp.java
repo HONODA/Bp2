@@ -58,12 +58,10 @@ public class Bp{
         
     }
 
-
     void feedward(){
         for(int i =0;i< length;i++)
             mLayer.get(i).feedward();
     }
-    
     void backward(){
         for(int i =length -1;i >= 0 ;i--)
             mLayer.get(i).calc_deta();
@@ -103,19 +101,68 @@ public class Bp{
                 s = s + ""+mLayer.get(1).neurals[i].Weight[j]+";";
         System.out.println(s);
     }
-
     double[] get_out(){
        return mLayer.get(length -1).realout;
     }
     double[] get_in(){
         return mLayer.get(0).lin;
     }
+    void init(int len,double[][] in ,int nelen,double[][] out){//初始化权值和偏置  
+        //随机生成
+        //len 总层数
+        //in 输入值数组
+        //nelen 层中总neural个数
+        //out 目标输出
+    
+        setlen(len);
+        mLayer = new ArrayList<>();
+        Layer inlayer = new Layer();
+        inlayer.addcount();
+        mLayer.add(inlayer);
+        Layer intol = new Layer();
+        intol.addcount();
+        intol.randomWeight(nelen,in.length);
+        mLayer.add(intol);
+
+        for(int i = 0; i < len -3;i++){
+            Layer l = new Layer();
+            l.addcount();
+            l.randomWeight(nelen,nelen);
+            mLayer.add(l);
+        }
+        //输出层初始化
+        Layer l = new Layer();
+        l.addcount();
+        l.randomWeight(out.length,nelen);
+        mLayer.add(l);
+
+        for(int j =0; j < mLayer.size();j++){
+            if(j == 0)
+                mLayer.get(j).Next =  mLayer.get(j+1);
+            else if(j == length -1)
+                mLayer.get(j).pre =  mLayer.get(j-1);
+            else{
+                mLayer.get(j).pre = mLayer.get(j-1);
+                mLayer.get(j).Next =  mLayer.get(j+1);
+            }
+        }
+        setin(in);
+        settarget(out);
+        
+    }
+
+    void setin(double[][] in){//输入初始化
+        mLayer.get(0).setin(in);
+    }
+    void settarget(double[][] target){//输出初始化 
+        mLayer.get(length -1).settarget(target);
+    }
     public static void main(String[] args) {
         LocalTime time1 = LocalTime.now();
         Bp backfeed = new Bp();
         double[] in = {0,0,0,0,0,0,0,0,0,0};
-        double[] out = {0,0,0};
-        backfeed.init(3,in,5,out);
+        double[] out = {0,0,0,0,0,0,0,0,0,0};
+        backfeed.init(4,in,10,out);
         for (int i =0;i <5000;i++){
             double[] in1 = {};
             double[] out1 ={}; 
@@ -124,15 +171,15 @@ public class Bp{
             y = i%3;
             if (y ==0){
                 in1 = new double[] {1,0,0,0,0,0,0,0,0,0};
-                out1 = new double[] {1,0,0};
+                out1 = new double[] {1,0,0,0,0,0,0,0,0,0};
             }
             if (y ==1){
                 in1 = new double[] {0,0,0,0,1,0,0,0,0,0};
-                out1 = new double[] {0,1,0};
+                out1 = new double[] {0,1,0,0,0,0,0,0,0,0};
             }
             if (y ==2){
                 in1 = new double[] {0,0,0,1,1,0,0,0,0,0};
-                out1 = new double[] {1,1,0};
+                out1 = new double[] {1,1,0,0,0,0,0,0,0,0};
             }
             backfeed.setin(in1);
             backfeed.settarget(out1);

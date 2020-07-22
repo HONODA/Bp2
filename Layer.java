@@ -179,4 +179,23 @@ public class Layer{
     
     }
 
+
+
+    //--------------------
+
+
+    void setin(double[][] in){
+        length = in.length;//col num
+        if(lin == null)
+            lin = new double[length];
+        if(net == null)
+            net = new double[length];
+        //lin = in;
+    }
+    void settarget(double[][] out){
+        length = out.length;
+        if(lout == null)
+            lout = new double[length];
+        //lout = out;
+    }
 }
